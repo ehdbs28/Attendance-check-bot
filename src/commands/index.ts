@@ -1,5 +1,5 @@
-import { ping } from "./ping";
+import { TokenLoginCommand } from "./tokenLogin";
 
-const Commands = [ping];
+const Commands = [TokenLoginCommand];
 
 export default Commands;
