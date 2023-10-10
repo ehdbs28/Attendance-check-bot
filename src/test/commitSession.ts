@@ -4,7 +4,7 @@ import {Config} from "../config";
 import {ResponseData, CommitData} from "../types/responseData";
 
 const octokit = new Octokit({
-    auth: Config.gitToken,
+    auth: undefined,
 });
 
 export class CommitSession{

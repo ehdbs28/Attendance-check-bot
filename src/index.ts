@@ -7,7 +7,7 @@ import { UserData } from "./saveData/userData";
 
 const log: Logger<ILogObj> = new Logger();
 
-const token = Config.botToken;
+const token = Config.token;
 
 (async () => {
     const intents = [
