@@ -1,5 +1,4 @@
 import fs from "fs";
-import path, { parse } from "path"
 import { Config } from "../config";
 import { UserDataType } from "../types/userData";
 import { SaveData } from "../types/saveData";

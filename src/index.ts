@@ -24,12 +24,12 @@ const token = Config.token;
     client.on("ready", async () => {
         if(client.application){
             await client.application?.commands.set(Commands);
-            client.application.commands.fetch()
             log.info("Successfully registered application commands!");
 
             await UserData.load();
         }
     });
+
     client.on("interactionCreate", async(interaction: Interaction) => onInteraction(client, interaction))
     client.on("error", err => {
         log.error(err);
