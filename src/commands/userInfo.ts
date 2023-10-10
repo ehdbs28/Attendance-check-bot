@@ -48,12 +48,12 @@ function getUserDataEmbed(userdata: GitUserData, interaction: CommandInteraction
             { name: 'Created At', value: userdata.created_at.split('T')[0], inline: true }
         )
         .addFields(
-            { name: 'Website', value: `[detail](${userdata.blog})`, inline: true },
-            { name: 'Company', value: userdata.company, inline: true },
-            { name: 'Location', value: userdata.location, inline: true }
+            { name: 'Website', value: (userdata.blog != "") ? `[detail](${userdata.blog})` : 'none', inline: true },
+            { name: 'Company', value: (userdata.company != null) ? userdata.company : 'none', inline: true },
+            { name: 'Location', value: (userdata.location != null) ? userdata.location : 'none', inline: true }
         )   
         .setTimestamp()
-        .setFooter({ text: interaction.user.username, iconURL: interaction.user.avatarURL()?.toString() });
+        .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL()?.toString() });
 
     return embed;
 }
