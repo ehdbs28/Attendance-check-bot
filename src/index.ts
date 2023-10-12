@@ -1,13 +1,16 @@
 import {Client, GatewayIntentBits, Interaction} from "discord.js";
-import {Config} from "./config";
 import {Logger, ILogObj} from "tslog";
 import Commands from "./commands";
 import {SlashCommand} from "./types/slashCommand";
 import { UserData } from "./saveData/userData";
+import dotenv from "dotenv";
+dotenv.config();
 
 const log: Logger<ILogObj> = new Logger();
 
-const token = Config.token;
+const token = process.env.token;
+log.info(process.env);
+log.info(token);
 
 (async () => {
     const intents = [

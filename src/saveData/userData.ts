@@ -1,5 +1,4 @@
 import fs from "fs";
-import { Config } from "../config";
 import { UserDataType } from "../types/userData";
 import { SaveData } from "../types/saveData";
 import {Logger, ILogObj} from "tslog";
@@ -8,7 +7,7 @@ const log: Logger<ILogObj> = new Logger();
 
 export const UserData: SaveData<UserDataType[]> = {
     data: [],
-    dataPath: Config.dataPath,
+    dataPath: process.env.dataPath || '',
     filePath: "userData.json",
     save: async function(){
         if(!fs.existsSync(this.dataPath)){
