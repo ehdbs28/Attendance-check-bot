@@ -9,8 +9,6 @@ dotenv.config();
 const log: Logger<ILogObj> = new Logger();
 
 const token = process.env.token;
-log.info(process.env);
-log.info(token);
 
 (async () => {
     const intents = [
