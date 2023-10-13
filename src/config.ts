@@ -1,4 +1,4 @@
 export const Config = {
-    embedMainColor: 0x0099FF,
+    embedMainColor: "#181717",
     embedThumbnailUrl: "https://i.imgur.com/TWTvTOm.png",
 }

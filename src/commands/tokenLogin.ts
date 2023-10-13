@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType, Client, CommandInteraction, Interaction }
 import { SlashCommand } from "../types/slashCommand";
 import {Logger, ILogObj} from "tslog";
 import { UserData } from "../saveData/userData";
+import { editChoicesData } from "./registerRepo";
 
 const log: Logger<ILogObj> = new Logger();
 
@@ -29,7 +30,7 @@ export const TokenLoginCommand: SlashCommand = {
             await onLogin(gitId, token, interaction);
             await interaction.followUp({
                 ephemeral: true,
-                content: '성공적으로 로그인하였습니다.'
+                content: '성공적으로 로그인하였습니다.',
             });
         }
         catch(err){
@@ -45,4 +46,5 @@ export const TokenLoginCommand: SlashCommand = {
 async function onLogin(gitId: string, token: string, interaction: CommandInteraction){
     UserData.data.push({ id: interaction.user.id, gitId: gitId, token: token });
     await UserData.save();
+    editChoicesData();
 }

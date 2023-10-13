@@ -1,4 +1,4 @@
-import { Client, CommandInteraction, EmbedBuilder } from "discord.js";
+import { Client, ColorResolvable, CommandInteraction, EmbedBuilder } from "discord.js";
 import { SlashCommand } from "../types/slashCommand";
 import { UserDataType } from "../types/userData";
 import {Logger, ILogObj} from "tslog";
@@ -9,8 +9,6 @@ import { UserData } from "../saveData/userData";
 import { Config } from "../config";
 
 const log: Logger<ILogObj> = new Logger();
-
-let octokit: Octokit;
 
 export const UserInfoCommand: SlashCommand = {
     name: "userinfo",
@@ -26,7 +24,7 @@ export const UserInfoCommand: SlashCommand = {
             return;
         }
 
-        const embed: EmbedBuilder = getUserDataEmbed(userData, interaction);
+        const embed: EmbedBuilder = createUserDataEmbed(userData, interaction);
         await interaction.followUp({
             ephemeral: true,
             embeds: [embed],
@@ -34,9 +32,9 @@ export const UserInfoCommand: SlashCommand = {
     }
 }
 
-function getUserDataEmbed(userdata: GitUserData, interaction: CommandInteraction){
+function createUserDataEmbed(userdata: GitUserData, interaction: CommandInteraction){
     const embed = new EmbedBuilder()
-        .setColor(Config.embedMainColor)
+        .setColor(<ColorResolvable>Config.embedMainColor)
         .setTitle(userdata.name)
         .setURL(userdata.html_url)
         .setAuthor({ name: userdata.login, url: userdata.html_url })
@@ -60,7 +58,6 @@ function getUserDataEmbed(userdata: GitUserData, interaction: CommandInteraction
 
 async function getGitUserData(interaction: CommandInteraction){
     const userData: UserDataType | undefined = UserData.data.find(obj => { return obj.id === interaction.user.id });
-    log.info(userData);
 
     if(userData === undefined)
         return;
@@ -68,7 +65,7 @@ async function getGitUserData(interaction: CommandInteraction){
     const gitId: string = userData.gitId;
     const gitToken: string = userData.token;
     
-    octokit = new Octokit({ auth: gitToken });
+    const octokit: Octokit = new Octokit({ auth: gitToken });
     const res: OctokitResponse<GitUserData> = await octokit.request(`GET /users/${gitId}`);
     return res.data;
 }

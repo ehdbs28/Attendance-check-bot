@@ -2,6 +2,8 @@ import fs from "fs";
 import { UserDataType } from "../types/userData";
 import { SaveData } from "../types/saveData";
 import {Logger, ILogObj} from "tslog";
+import dotenv from "dotenv";
+dotenv.config();
 
 const log: Logger<ILogObj> = new Logger();
 
@@ -9,7 +11,7 @@ export const UserData: SaveData<UserDataType[]> = {
     data: [],
     dataPath: process.env.dataPath || '',
     filePath: "userData.json",
-    save: async function(){
+    save: function(){
         if(!fs.existsSync(this.dataPath)){
             try{
                 fs.mkdirSync(this.dataPath);
@@ -28,7 +30,7 @@ export const UserData: SaveData<UserDataType[]> = {
             log.error(err);
         }
     },
-    load: async function(){
+    load: function(){
         if(!fs.existsSync(`${this.dataPath}/${this.filePath}`)){
             log.error("doesnt exist user json file in project!");
             return;
