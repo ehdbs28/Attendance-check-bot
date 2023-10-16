@@ -11,11 +11,17 @@ export const RegisterRepoCommand: SlashCommand = {
     description: "관리할 레포지토리를 등록합니다.",
     options: [
         {
-        required: true,
-        name: "owner",
-        description: "해당 레포지토리의 주인을 입력하세요.",
-        type: ApplicationCommandOptionType.String,
-        choices: []
+            required: true,
+            name: "owner",
+            description: "해당 레포지토리의 주인을 입력하세요.",
+            type: ApplicationCommandOptionType.String,
+            choices: []
+        },
+        {
+            required: true,
+            name: "reponame",
+            description: "레포지토리의 이름을 입력하세요.",
+            type: ApplicationCommandOptionType.String
         }
     ],
     execute: async (client: Client, interaction: CommandInteraction) => {

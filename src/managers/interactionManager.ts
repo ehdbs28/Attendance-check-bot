@@ -1,4 +1,4 @@
-import { ApplicationCommand, ApplicationCommandDataResolvable, Client, Interaction } from "discord.js";
+import { ApplicationCommandDataResolvable, Client, Interaction } from "discord.js";
 import Commands from "../commands";
 import {Logger, ILogObj} from "tslog";
 import { SlashCommand } from "../types/slashCommand";

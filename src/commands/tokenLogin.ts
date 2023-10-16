@@ -3,6 +3,7 @@ import { SlashCommand } from "../types/slashCommand";
 import {Logger, ILogObj} from "tslog";
 import { UserData } from "../saveData/userData";
 import { editChoicesData } from "./registerRepo";
+import { embedManager } from "..";
 
 const log: Logger<ILogObj> = new Logger();
 
@@ -30,14 +31,21 @@ export const TokenLoginCommand: SlashCommand = {
             await onLogin(gitId, token, interaction);
             await interaction.followUp({
                 ephemeral: true,
-                content: '성공적으로 로그인하였습니다.',
+                embeds: [embedManager.createEmbed({
+                    desc: "성공적으로 로그인하였습니다. 새로고침하여 유저 목록을 갱신해주세요.",
+                    fields: [
+                        {name: "window", value: "ctrl + R", inline: true},
+                        {name: "mac", value: "command + R", inline: true} 
+                    ],
+                    color: "#79AC78"}
+                )]
             });
         }
         catch(err){
             log.error(err);
             await interaction.followUp({
                 ephemeral: true,
-                content: '로그인 오류가 발생했습니다.',
+                embeds: [embedManager.createEmbed({desc: "로그인 중 오류가 발생했습니다.", color: "#C70039"})]
             });
         }
     }

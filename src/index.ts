@@ -1,10 +1,10 @@
 import {Client, GatewayIntentBits, Interaction} from "discord.js";
 import {Logger, ILogObj} from "tslog";
-import {SlashCommand} from "./types/slashCommand";
 import { UserData } from "./saveData/userData";
 import dotenv from "dotenv";
 import { InteractionManager } from "./managers/interactionManager";
 import { editChoicesData } from "./commands/registerRepo";
+import { EmbedManager } from "./managers/embedManager";
 dotenv.config();
 
 const log: Logger<ILogObj> = new Logger();
@@ -13,6 +13,7 @@ const token = process.env.token;
 
 let client: Client;
 export let interactionManager: InteractionManager;
+export let embedManager : EmbedManager;
 
 (async () => {
     const intents = [
@@ -27,6 +28,7 @@ export let interactionManager: InteractionManager;
     });
 
     interactionManager = new InteractionManager(client);
+    embedManager = new EmbedManager(client, "#4B527E");
 
     client.on("ready", async () => {
         UserData.load();

@@ -1,4 +1,4 @@
-import { Client, ColorResolvable, CommandInteraction, EmbedBuilder } from "discord.js";
+import { Client, CommandInteraction, EmbedBuilder } from "discord.js";
 import { SlashCommand } from "../types/slashCommand";
 import { UserDataType } from "../types/userData";
 import {Logger, ILogObj} from "tslog";
@@ -6,7 +6,7 @@ import {Octokit} from "octokit";
 import {OctokitResponse} from "@octokit/types"
 import {GitUserData} from "../types/responseData";
 import { UserData } from "../saveData/userData";
-import { Config } from "../config";
+import { embedManager } from "..";
 
 const log: Logger<ILogObj> = new Logger();
 
@@ -33,25 +33,20 @@ export const UserInfoCommand: SlashCommand = {
 }
 
 function createUserDataEmbed(userdata: GitUserData, interaction: CommandInteraction){
-    const embed = new EmbedBuilder()
-        .setColor(<ColorResolvable>Config.embedMainColor)
-        .setTitle(userdata.name)
-        .setURL(userdata.html_url)
-        .setAuthor({ name: userdata.login, url: userdata.html_url })
-        .setDescription(userdata.bio)
-        .setThumbnail(userdata.avatar_url)
-        .addFields(
+    const embed = embedManager.createEmbed({
+        title: userdata.name,
+        author: { name: userdata.login, url: userdata.html_url },
+        desc: userdata.bio,
+        thumbnail: userdata.avatar_url,
+        fields : [
             { name: 'Followers', value: userdata.followers.toString(), inline: true },
             { name: 'Following', value: userdata.following.toString(), inline: true },
-            { name: 'Created At', value: userdata.created_at.split('T')[0], inline: true }
-        )
-        .addFields(
+            { name: 'Created At', value: userdata.created_at.split('T')[0], inline: true },
             { name: 'Website', value: (userdata.blog != "") ? `[detail](${userdata.blog})` : 'none', inline: true },
             { name: 'Company', value: (userdata.company != null) ? userdata.company : 'none', inline: true },
             { name: 'Location', value: (userdata.location != null) ? userdata.location : 'none', inline: true }
-        )   
-        .setTimestamp()
-        .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL()?.toString() });
+        ]
+    });
 
     return embed;
 }
