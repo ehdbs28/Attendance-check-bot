@@ -1,8 +1,5 @@
 import {Client, ColorResolvable, EmbedBuilder } from "discord.js";
-import {Logger, ILogObj} from "tslog";
 import { EmbedOption } from "../types/embedOption";
-
-const log: Logger<ILogObj> = new Logger();
 
 export class EmbedManager{
     private client: Client;
@@ -17,25 +14,27 @@ export class EmbedManager{
     }
 
     public createEmbed(option?: EmbedOption): EmbedBuilder{
-        const embed = this.embed;
+        this.initEmbedSet();
 
         if(option === undefined || option === null)
-            return embed;
+            return this.embed;
         
         if(option.title)
-            embed.setTitle(option.title);
+            this.embed.setTitle(option.title);
+        if(option.title_url)
+            this.embed.setURL(option.title_url);
         if(option.desc)
-            embed.setDescription(option.desc);
+            this.embed.setDescription(option.desc);
         if(option.author)
-            embed.setAuthor(option.author);
+            this.embed.setAuthor(option.author);
         if(option.thumbnail)
-            embed.setThumbnail(option.thumbnail);
+            this.embed.setThumbnail(option.thumbnail);
         if(option.fields)
-            embed.setFields(option.fields);
+            this.embed.setFields(option.fields);
         if(option.color)
-            embed.setColor(<ColorResolvable>option.color);
+            this.embed.setColor(<ColorResolvable>option.color);
 
-        return embed;
+        return this.embed;
     }
 
     constructor(client: Client, embedColor: string){
@@ -43,6 +42,5 @@ export class EmbedManager{
         this.embedColor = embedColor;
 
         this.embed = new EmbedBuilder();
-        this.initEmbedSet();
     }
 }

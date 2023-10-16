@@ -1,8 +1,12 @@
-import { ApplicationCommandChoicesData, ApplicationCommandOptionChoiceData, ApplicationCommandOptionType, Client, CommandInteraction, Interaction } from "discord.js";
+import { ApplicationCommandOptionChoiceData, ApplicationCommandOptionType, Client, CommandInteraction, Interaction } from "discord.js";
 import { SlashCommand } from "../types/slashCommand";
 import {Logger, ILogObj} from "tslog";
-import { UserData } from "../saveData/userData";
-import { interactionManager } from "..";
+import { UserData, getUserDataWithId } from "../saveData/userData";
+import { embedManager, interactionManager } from "..";
+import { GitRepoData } from "../types/gitDataTypes/gitRepoData";
+import { UserDataType } from "../types/userData";
+import { Octokit } from "octokit";
+import {OctokitResponse} from "@octokit/types"
 
 const log: Logger<ILogObj> = new Logger();
 
@@ -25,11 +29,45 @@ export const RegisterRepoCommand: SlashCommand = {
         }
     ],
     execute: async (client: Client, interaction: CommandInteraction) => {
-        log.info((<ApplicationCommandChoicesData>RegisterRepoCommand.options?.at(0)).choices);
+        const userData: UserDataType | undefined = getUserDataWithId(interaction.user.id);
+        
+        if(!userData){
+            await interaction.followUp({
+                ephemeral: true,
+                embeds: [embedManager.createEmbed({ desc: "로그인 후 이용가능한 기능입니다. `/login`을 통해 로그인을 진행해주세요.", color: "#C70039" })]
+            });
+            return;
+        }
+        
+        const owner: string = interaction.options.get("owner")?.value?.toString() || "";
+        const reponame: string = interaction.options.get("reponame")?.value?.toString() || "";
+        const repoData: GitRepoData | undefined = await getRepoData(userData.token, owner, reponame);
+
+        if(!repoData){
+            await interaction.followUp({
+                ephemeral: true,
+                embeds: [embedManager.createEmbed({ desc: `\`${owner}/${reponame}\` 레포지토리가 존재하지 않습니다.`, color: "#C70039" })]
+            });
+            return;
+        }
+        
         await interaction.followUp({
             ephemeral: true,
-            content: "test"
+            embeds: [
+                embedManager.createEmbed({desc: `성공적으로 \`${owner}/${reponame}\` 레포지토리를 등록했습니다.`, color: "#79AC78"}),
+            ]
         });
+    }
+}
+
+async function getRepoData(token: string, owner: string, name: string) {
+    try{
+        const octokit = new Octokit({ auth: token });
+        const res: OctokitResponse<GitRepoData> = await octokit.request(`GET /repos/${owner}/${name}`);
+        return res.data;
+    }
+    catch{
+        return undefined;
     }
 }
 
@@ -46,6 +84,12 @@ export function editChoicesData(): void {
             description: "해당 레포지토리의 주인을 입력하세요.",
             type: ApplicationCommandOptionType.String,
             choices: choicesData
+        },
+        {
+            required: true,
+            name: "reponame",
+            description: "레포지토리의 이름을 입력하세요.",
+            type: ApplicationCommandOptionType.String
         }
     ]});
 }

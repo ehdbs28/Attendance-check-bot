@@ -52,3 +52,6 @@ export const UserData: SaveData<UserDataType[]> = {
     },
 }
 
+export function getUserDataWithId(id: string) : UserDataType | undefined {
+    return UserData.data.find(obj => { return obj.id === id });
+}

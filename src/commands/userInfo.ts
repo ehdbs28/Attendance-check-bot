@@ -1,12 +1,12 @@
 import { Client, CommandInteraction, EmbedBuilder } from "discord.js";
 import { SlashCommand } from "../types/slashCommand";
-import { UserDataType } from "../types/userData";
 import {Logger, ILogObj} from "tslog";
 import {Octokit} from "octokit";
 import {OctokitResponse} from "@octokit/types"
-import {GitUserData} from "../types/responseData";
-import { UserData } from "../saveData/userData";
 import { embedManager } from "..";
+import { GitUserData } from "../types/gitDataTypes/gitUserData";
+import { UserDataType } from "../types/userData";
+import { getUserDataWithId } from "../saveData/userData";
 
 const log: Logger<ILogObj> = new Logger();
 
@@ -19,12 +19,12 @@ export const UserInfoCommand: SlashCommand = {
         if(userData === undefined){
             await interaction.followUp({
                 ephemeral: true,
-                content: "로그인 후 이용가능한 기능입니다. `/login`을 통해 로그인을 진행해주세요."
+                embeds: [embedManager.createEmbed({ desc: "로그인 후 이용가능한 기능입니다. `/login`을 통해 로그인을 진행해주세요.", color: "#C70039" })]
             });
             return;
         }
 
-        const embed: EmbedBuilder = createUserDataEmbed(userData, interaction);
+        const embed: EmbedBuilder = createUserDataEmbed(userData);
         await interaction.followUp({
             ephemeral: true,
             embeds: [embed],
@@ -32,17 +32,18 @@ export const UserInfoCommand: SlashCommand = {
     }
 }
 
-function createUserDataEmbed(userdata: GitUserData, interaction: CommandInteraction){
+function createUserDataEmbed(userdata: GitUserData){
     const embed = embedManager.createEmbed({
         title: userdata.name,
-        author: { name: userdata.login, url: userdata.html_url },
+        title_url: userdata.html_url,
+        author: { name: userdata.login },
         desc: userdata.bio,
         thumbnail: userdata.avatar_url,
         fields : [
             { name: 'Followers', value: userdata.followers.toString(), inline: true },
             { name: 'Following', value: userdata.following.toString(), inline: true },
             { name: 'Created At', value: userdata.created_at.split('T')[0], inline: true },
-            { name: 'Website', value: (userdata.blog != "") ? `[detail](${userdata.blog})` : 'none', inline: true },
+            { name: 'Website', value: (userdata.blog != "") ? `[link](${userdata.blog})` : 'none', inline: true },
             { name: 'Company', value: (userdata.company != null) ? userdata.company : 'none', inline: true },
             { name: 'Location', value: (userdata.location != null) ? userdata.location : 'none', inline: true }
         ]
@@ -52,9 +53,9 @@ function createUserDataEmbed(userdata: GitUserData, interaction: CommandInteract
 }
 
 async function getGitUserData(interaction: CommandInteraction){
-    const userData: UserDataType | undefined = UserData.data.find(obj => { return obj.id === interaction.user.id });
+    const userData: UserDataType | undefined = getUserDataWithId(interaction.user.id);
 
-    if(userData === undefined)
+    if(!userData)
         return;
 
     const gitId: string = userData.gitId;
