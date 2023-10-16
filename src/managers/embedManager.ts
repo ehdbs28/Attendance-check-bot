@@ -1,4 +1,4 @@
-import {Client, ColorResolvable, EmbedBuilder } from "discord.js";
+import {Client, ColorResolvable, Embed, EmbedBuilder } from "discord.js";
 import { EmbedOption } from "../types/embedOption";
 
 export class EmbedManager{
@@ -8,14 +8,13 @@ export class EmbedManager{
     private embedColor: string;
 
     private initEmbedSet(){
+        this.embed = new EmbedBuilder();
         this.embed
             .setColor(<ColorResolvable>this.embedColor)
             .setTimestamp();
     }
 
     public createEmbed(option?: EmbedOption): EmbedBuilder{
-        this.initEmbedSet();
-
         if(option === undefined || option === null)
             return this.embed;
         
@@ -42,5 +41,6 @@ export class EmbedManager{
         this.embedColor = embedColor;
 
         this.embed = new EmbedBuilder();
+        this.initEmbedSet();
     }
 }
