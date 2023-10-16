@@ -1,14 +1,12 @@
 import { ApplicationCommandOptionChoiceData, ApplicationCommandOptionType, Client, CommandInteraction, Interaction } from "discord.js";
 import { SlashCommand } from "../types/slashCommand";
-import {Logger, ILogObj} from "tslog";
 import { UserData, getUserDataWithId } from "../saveData/userData";
 import { embedManager, interactionManager } from "..";
 import { GitRepoData } from "../types/gitDataTypes/gitRepoData";
 import { UserDataType } from "../types/userData";
 import { Octokit } from "octokit";
 import {OctokitResponse} from "@octokit/types"
-
-const log: Logger<ILogObj> = new Logger();
+import { RepoData } from "../saveData/repoData";
 
 export const RegisterRepoCommand: SlashCommand = {
     name: "registerrepo",
@@ -50,6 +48,9 @@ export const RegisterRepoCommand: SlashCommand = {
             });
             return;
         }
+
+        RepoData.data = { owner, reponame };
+        RepoData.save();
         
         await interaction.followUp({
             ephemeral: true,
