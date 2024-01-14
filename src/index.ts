@@ -3,9 +3,7 @@ import {Logger, ILogObj} from "tslog";
 import { UserData } from "./saveData/userData";
 import dotenv from "dotenv";
 import { InteractionManager } from "./managers/interactionManager";
-import { editChoicesData } from "./commands/registerRepo";
 import { EmbedManager } from "./managers/embedManager";
-import { RepoData } from "./saveData/repoData";
 dotenv.config();
 
 const log: Logger<ILogObj> = new Logger();
@@ -21,7 +19,7 @@ export let embedManager : EmbedManager;
         GatewayIntentBits.Guilds,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildIntegrations,
+        GatewayIntentBits.GuildIntegrations
     ];
 
     client = new Client({
@@ -33,8 +31,6 @@ export let embedManager : EmbedManager;
 
     client.on("ready", async () => {
         UserData.load();
-        RepoData.load();
-        editChoicesData();
         await interactionManager.registerAllInteraction();
     });
     client.on("interactionCreate", async(interaction: Interaction) => interactionManager.onInteraction(client, interaction))

@@ -1,7 +1,7 @@
 {
-  "name": "github_healper",
+  "name": "attendance-check-bot",
   "version": "1.0.0",
-  "description": "팀프로젝트시 깃허브 사용의 편의성을 위해 제작하게 된 디스코드 봇입니다.",
+  "description": "출석체크용 봇",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",

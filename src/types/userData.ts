@@ -1,5 +1,6 @@
 export type UserDataType = {
     id: string,
-    gitId: string,
-    token: string,
+    attendance: number,   
+    isAttendance: boolean,
+    lastAttendanceTime: Date | null,
 }

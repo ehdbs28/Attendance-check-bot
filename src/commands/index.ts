@@ -1,8 +1,5 @@
-import { TokenLoginCommand } from "./tokenLogin";
-import { UserInfoCommand } from "./userInfo";
-import { RegisterRepoCommand } from "./registerRepo";
-import { RepoInfoCommand } from "./repoInfo";
+import { RegisterUserCommand } from "./registerUser";
 
-const Commands = [TokenLoginCommand, UserInfoCommand, RegisterRepoCommand, RepoInfoCommand];
+const Commands = [RegisterUserCommand];
 
 export default Commands;
