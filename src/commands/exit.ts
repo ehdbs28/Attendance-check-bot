@@ -6,7 +6,7 @@ import { UserDataType } from "../types/userData";
 import { embedManager } from "..";
 
 export const ExitCommand: SlashCommand = {
-    name: "타이머 종료",
+    name: "종료",
     description: "타이머를 종료합니다.",
     execute: async (client: Client, interaction: CommandInteraction) => {
         const userData: UserDataType | undefined = getUserDataWithId(interaction.user.id);
@@ -19,7 +19,16 @@ export const ExitCommand: SlashCommand = {
             return;
         }
 
-        // 타이머 체크 해주기
+        if(userData.lastAttendanceTime == null || !userData.todayFirstattendance){
+            await interaction.followUp({
+                ephemeral: true,
+                embeds: [embedManager.createEmbed({ desc: "먼저 타이머를 시작해주세요.", color: "#C70039" })]
+            });
+            return;
+        }
+
+        let now = new Date();
+        userData.attendance = AttendanceCheck(userData.lastAttendanceTime, now);
         
         await interaction.followUp({
             ephemeral: true,
@@ -28,4 +37,14 @@ export const ExitCommand: SlashCommand = {
             ]
         });
     }
+}
+
+function AttendanceCheck(prev: Date | null, now: Date) : boolean {
+    if(prev == null){
+        return false;
+    }
+
+    var prevDate : number = prev.getHours() * 60 + prev.getMinutes();
+    var nowDate : number = now.getHours() * 60 + now.getMinutes();
+    return Math.abs(nowDate - prevDate) >= 120;
 }

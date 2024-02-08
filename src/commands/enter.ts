@@ -6,7 +6,7 @@ import { UserDataType } from "../types/userData";
 import { embedManager } from "..";
 
 export const EnterCommand: SlashCommand = {
-    name: "타이머 시작",
+    name: "시작",
     description: "타이머를 시작합니다.",
     execute: async (client: Client, interaction: CommandInteraction) => {
         const userData: UserDataType | undefined = getUserDataWithId(interaction.user.id);
@@ -20,12 +20,24 @@ export const EnterCommand: SlashCommand = {
         }
 
         let now = new Date();
+        userData.lastAttendanceTime = now;
         
-        await interaction.followUp({
-            ephemeral: true,
-            embeds: [
-                embedManager.createEmbed({desc: `타이머를 시작합니다.`, color: "#79AC78"}),
-            ]
-        });
+        if(!userData.todayFirstattendance){
+            userData.todayFirstattendance = true;
+            await interaction.followUp({
+                ephemeral: true,
+                embeds: [
+                    embedManager.createEmbed({desc: `타이머를 시작합니다. /종료 명령어를 통해 종료하실 수 있습니다.`, color: "#79AC78"}),
+                ]
+            });
+        }
+        else{
+            await interaction.followUp({
+                ephemeral: true,
+                embeds: [
+                    embedManager.createEmbed({desc: `타이머를 재개합니다. /종료 명령어를 통해 종료하실 수 있습니다.`, color: "#79AC78"}),
+                ]
+            });
+        }
     }
 }
