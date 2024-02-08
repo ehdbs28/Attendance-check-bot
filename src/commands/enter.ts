@@ -19,15 +19,21 @@ export const EnterCommand: SlashCommand = {
             return;
         }
 
-        let now = new Date();
-        userData.lastAttendanceTime = now;
-        
-        if(!userData.todayFirstattendance){
-            userData.todayFirstattendance = true;
+        if(userData.timerRunning){
+            await interaction.followUp({
+                ephemeral: true,
+                embeds: [embedManager.createEmbed({ desc: "이미 타이머가 진행중입니다.", color: "#C70039" })]
+            });
+            return;
+        }
+
+        if(!userData.AttendanceStartTime == null){
+            let now = new Date();
+            userData.AttendanceStartTime = now;
             await interaction.followUp({
                 ephemeral: true,
                 embeds: [
-                    embedManager.createEmbed({desc: `타이머를 시작합니다. /종료 명령어를 통해 종료하실 수 있습니다.`, color: "#79AC78"}),
+                    embedManager.createEmbed({title: `타이머를 시작합니다.`, desc: `\`/종료\` 명령어를 통해 종료하실 수 있습니다.`, color: "#79AC78"}),
                 ]
             });
         }
@@ -35,9 +41,11 @@ export const EnterCommand: SlashCommand = {
             await interaction.followUp({
                 ephemeral: true,
                 embeds: [
-                    embedManager.createEmbed({desc: `타이머를 재개합니다. /종료 명령어를 통해 종료하실 수 있습니다.`, color: "#79AC78"}),
+                    embedManager.createEmbed({title: `타이머를 재개합니다.`, desc: `\`/종료\` 명령어를 통해 종료하실 수 있습니다.`, color: "#79AC78"}),
                 ]
             });
         }
+
+        userData.timerRunning = true;
     }
 }

@@ -26,7 +26,8 @@ export const RegisterUserCommand: SlashCommand = {
             await interaction.followUp({
                 ephemeral: true,
                 embeds: [embedManager.createEmbed({
-                    desc: "성공적으로 사용자가 등록되었습니다. 정삭적인 동작을 위해 새로고침하여 사용자 목록을 갱신해주세요.",
+                    title: `성공적으로 사용자가 등록되었습니다!`,
+                    desc: "정삭적인 동작을 위해 새로고침하여 사용자 목록을 갱신해주세요.",
                     fields: [
                         {name: "for window", value: "ctrl + R", inline: true},
                         {name: "for mac", value: "command + R", inline: true} 
@@ -46,6 +47,6 @@ export const RegisterUserCommand: SlashCommand = {
 }
 
 async function onRegister(interaction: CommandInteraction){
-    UserData.data.push({ id: interaction.user.id, attendance: 0, isAttendance: false, lastAttendanceTime: null });
+    UserData.data.push({ id: interaction.user.id, timerRunning: false, attendance: false, AttendanceStartTime: null });
     await UserData.save();
 }

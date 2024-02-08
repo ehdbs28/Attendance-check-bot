@@ -17,6 +17,8 @@ export class EmbedManager{
     public createEmbed(option?: EmbedOption): EmbedBuilder{
         if(option === undefined || option === null)
             return this.embed;
+
+        this.initEmbedSet();
         
         if(option.title)
             this.embed.setTitle(option.title);

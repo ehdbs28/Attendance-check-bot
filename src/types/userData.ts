@@ -1,6 +1,6 @@
 export type UserDataType = {
     id: string,
+    timerRunning: boolean,
     attendance: boolean,   
-    todayFirstattendance: boolean,
-    lastAttendanceTime: Date | null,
+    AttendanceStartTime: Date | null,
 }
