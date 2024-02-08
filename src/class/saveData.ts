@@ -35,7 +35,6 @@ export class SaveData<T>{
     }
         
     public load(){
-        log.debug(`${process.env.PWD}/${this.dataPath}/${this.filePath}`);
         if(!fs.existsSync(`${process.env.PWD}/${this.dataPath}/${this.filePath}`)){
             log.error("doesnt exist user json file in project!");
             return;

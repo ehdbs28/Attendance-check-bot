@@ -27,9 +27,9 @@ export const EnterCommand: SlashCommand = {
             return;
         }
 
-        if(!userData.AttendanceStartTime == null){
-            let now = new Date();
-            userData.AttendanceStartTime = now;
+        if(userData.attendanceStartTime == null){
+            let now = Date.now();
+            userData.attendanceStartTime = now;
             await interaction.followUp({
                 ephemeral: true,
                 embeds: [
@@ -47,5 +47,6 @@ export const EnterCommand: SlashCommand = {
         }
 
         userData.timerRunning = true;
+        UserData.save();
     }
 }

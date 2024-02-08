@@ -47,6 +47,6 @@ export const RegisterUserCommand: SlashCommand = {
 }
 
 async function onRegister(interaction: CommandInteraction){
-    UserData.data.push({ id: interaction.user.id, timerRunning: false, attendance: false, AttendanceStartTime: null });
+    UserData.data.push({ id: interaction.user.id, timerRunning: false, attendance: false, attendanceStartTime: null });
     await UserData.save();
 }
