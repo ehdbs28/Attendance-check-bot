@@ -48,7 +48,7 @@ export const ExitCommand: SlashCommand = {
                 embeds: [
                     embedManager.createEmbed(
                         {
-                            title: `${prevDate.getMonth()}월 ${prevDate.getDay()}일 출석을 완료하였습니다!`,
+                            title: `${prevDate.getMonth() + 1}월 ${prevDate.getDate()}일 출석을 완료하였습니다!`,
                             desc: `타이머를 종료합니다.`,
                             color: "#79AC78"
                         }
