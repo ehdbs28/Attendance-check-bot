@@ -1,10 +1,7 @@
 import { APIEmbed, APIEmbedField, ApplicationCommandDataResolvable, Client, EmbedField, Interaction, User } from "discord.js";
-import Commands from "../commands";
 import {Logger, ILogObj} from "tslog";
-import { SlashCommand } from "../types/slashCommand";
 import dotenv from "dotenv";
 import { UserData } from "../saveData/userData";
-import { EmbedManager } from "./embedManager";
 import { embedManager } from "..";
 dotenv.config();
 

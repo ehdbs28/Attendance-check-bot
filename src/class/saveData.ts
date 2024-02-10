@@ -50,5 +50,4 @@ export class SaveData<T>{
             log.error(err);
         }
     }
-
 }

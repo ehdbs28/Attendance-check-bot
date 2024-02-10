@@ -1,6 +1,5 @@
 import { ApplicationCommandOptionType, Client, CommandInteraction, Interaction } from "discord.js";
 import { SlashCommand } from "../types/slashCommand";
-import { Logger, ILogObj } from "tslog";
 import { UserData, getUserDataWithId } from "../saveData/userData";
 import { UserDataType } from "../types/userData";
 import { embedManager } from "..";
