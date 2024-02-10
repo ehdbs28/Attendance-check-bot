@@ -4,8 +4,12 @@ import { Logger, ILogObj } from "tslog";
 import { UserData, getUserDataWithId } from "../saveData/userData";
 import { UserDataType } from "../types/userData";
 import { embedManager } from "..";
+import dotenv from "dotenv";
+dotenv.config();
 
 const log: Logger<ILogObj> = new Logger();
+
+const standardAttendanceMinute: number = process.env.attendanceMinute === undefined ? 60 : parseInt(process.env.attendanceMinute); 
 
 export const ExitCommand: SlashCommand = {
     name: "종료",
@@ -38,8 +42,7 @@ export const ExitCommand: SlashCommand = {
         let nowTotalMinute = nowDate.getHours() * 60 + nowDate.getMinutes();
         let diff = Math.abs(prevTotalMinute - nowTotalMinute);
 
-        // 나중에 매니저 데이터로 교체하기 상수 뺴기
-        userData.attendance = diff >= 120;
+        userData.attendance = diff >= standardAttendanceMinute;
         userData.timerRunning = false;
         
         if(userData.attendance){
