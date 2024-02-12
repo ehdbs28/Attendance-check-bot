@@ -8,7 +8,7 @@ dotenv.config();
 const log: Logger<ILogObj> = new Logger();
 
 const dataResetHour: number = process.env.dataResetHour === undefined ? 0 : parseInt(process.env.dataResetHour);
-const notificationChannelId: string = process.env.notificationChannelId === undefined ? '' :process.env.notificationChannelId;
+const notificationChannelId: string = process.env.notificationChannelId === undefined ? '' : process.env.notificationChannelId;
 
 export class ResetTimer{
     private client: Client;
@@ -29,8 +29,8 @@ export class ResetTimer{
     }
     
     private TimerCheck(){
-        let date: Date = new Date(Date.now());
-        let hours: number = date.getHours();
+        const date: Date = new Date(Date.now());
+        const hours: number = date.getHours();
         
         let hourCheck: boolean = hours === dataResetHour;
         let alreadyCheckDate: boolean = this.lastCheckDate.getMonth() === date.getMonth() && this.lastCheckDate.getDate() === date.getDate();
