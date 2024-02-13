@@ -29,19 +29,23 @@ export class ResetTimer{
     }
     
     private TimerCheck(){
-        const date: Date = new Date(Date.now());
-        const hours: number = date.getHours();
-        
-        let hourCheck: boolean = hours === dataResetHour;
-        let alreadyCheckDate: boolean = this.lastCheckDate.getMonth() === date.getMonth() && this.lastCheckDate.getDate() === date.getDate();
+        const interval = 1000;
+        setInterval(async () => {
+            const date: Date = new Date(Date.now());
+            const koreanTime = new Date(Date.UTC(
+                date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+                date.getUTCHours() + 9, date.getUTCMinutes(), date.getUTCSeconds()
+            ));
 
-        if(hourCheck && !alreadyCheckDate){
-            this.lastCheckDate = date;
-            this.SendInformationImbed();
-            this.ResetData();
-        }
-        
-        setTimeout(()=>this.TimerCheck(), 1000);
+            let hourCheck: boolean = koreanTime.getHours() === dataResetHour;
+            let alreadyCheckDate: boolean = this.lastCheckDate.getMonth() === koreanTime.getMonth() && this.lastCheckDate.getDate() === koreanTime.getDate();
+
+            if(hourCheck && !alreadyCheckDate) {
+                this.lastCheckDate = koreanTime;
+                await this.SendInformationImbed();
+                this.ResetData();
+            }
+        }, interval);
     }
     
     private async SendInformationImbed(){

@@ -27,8 +27,13 @@ export const EnterCommand: SlashCommand = {
         }
 
         if(userData.attendanceStartTime == null){
-            let now = Date.now();
-            userData.attendanceStartTime = now;
+            let now = new Date(Date.now());
+            const koreanTime = new Date(Date.UTC(
+                now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+                now.getUTCHours() + 9, now.getUTCMinutes(), now.getUTCSeconds()
+            ));
+            
+            userData.attendanceStartTime = koreanTime.valueOf();
             await interaction.followUp({
                 ephemeral: true,
                 embeds: [
