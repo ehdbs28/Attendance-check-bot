@@ -31,17 +31,19 @@ export class ResetTimer{
     private TimerCheck(){
         const interval = 1000;
         setInterval(async () => {
-            const date: Date = new Date(Date.now());
-            const koreanTime = new Date(Date.UTC(
-                date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
-                date.getUTCHours() + 9, date.getUTCMinutes(), date.getUTCSeconds()
-            ));
-
-            let hourCheck: boolean = koreanTime.getHours() === dataResetHour;
-            let alreadyCheckDate: boolean = this.lastCheckDate.getMonth() === koreanTime.getMonth() && this.lastCheckDate.getDate() === koreanTime.getDate();
+            let now = new Date();
+            const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+            const diff = 9 * 60 * 60 * 1000;
+            now = new Date(utc + diff); 
+            
+            log.debug(`${now.getHours()} ${dataResetHour}`);
+            let hourCheck: boolean = now.getHours() === dataResetHour;
+            let alreadyCheckDate: boolean = this.lastCheckDate.getMonth() === now.getMonth() && this.lastCheckDate.getDate() === now.getDate();
+            
+            log.debug(`${hourCheck} ${alreadyCheckDate}`);
 
             if(hourCheck && !alreadyCheckDate) {
-                this.lastCheckDate = koreanTime;
+                this.lastCheckDate = now;
                 await this.SendInformationImbed();
                 this.ResetData();
             }

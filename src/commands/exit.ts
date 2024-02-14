@@ -33,16 +33,15 @@ export const ExitCommand: SlashCommand = {
             return;
         }
 
-        let prevDate = new Date(userData.attendanceStartTime);
-        let nowDate = new Date(Date.now());
-        const koreanTime = new Date(Date.UTC(
-            nowDate.getUTCFullYear(), nowDate.getUTCMonth(), nowDate.getUTCDate(),
-            nowDate.getUTCHours() + 9, nowDate.getUTCMinutes(), nowDate.getUTCSeconds()
-        ));
+        const prevDate = new Date(userData.attendanceStartTime);
+        let now = new Date();
+        const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+        const kdiff = 9 * 60 * 60 * 1000;
+        now = new Date(utc + kdiff); 
         
-        let prevTotalMinute = prevDate.getHours() * 60 + prevDate.getMinutes();
-        let nowTotalMinute = nowDate.getHours() * 60 + nowDate.getMinutes();
-        let diff = Math.abs(prevTotalMinute - nowTotalMinute);
+        const prevTotalMinute = prevDate.getHours() * 60 + prevDate.getMinutes();
+        const nowTotalMinute = now.getHours() * 60 + now.getMinutes();
+        const diff = Math.abs(prevTotalMinute - nowTotalMinute);
 
         userData.attendance = diff >= standardAttendanceMinute;
         userData.timerRunning = false;
