@@ -36,11 +36,8 @@ export class ResetTimer{
             const diff = 9 * 60 * 60 * 1000;
             now = new Date(utc + diff); 
             
-            log.debug(`${now.getHours()} ${dataResetHour}`);
             let hourCheck: boolean = now.getHours() === dataResetHour;
             let alreadyCheckDate: boolean = this.lastCheckDate.getMonth() === now.getMonth() && this.lastCheckDate.getDate() === now.getDate();
-            
-            log.debug(`${hourCheck} ${alreadyCheckDate}`);
 
             if(hourCheck && !alreadyCheckDate) {
                 this.lastCheckDate = now;
